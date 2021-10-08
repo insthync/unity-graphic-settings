@@ -18,6 +18,7 @@ namespace GraphicSettings
             if (dropdown != null)
                 dropdown.onValueChanged.AddListener(OnValueChanged);
             UpdateOptions();
+            dirtyFullScreenMode = Screen.fullScreenMode;
         }
 
         private void OnDestroy()
@@ -43,15 +44,25 @@ namespace GraphicSettings
             {
                 return ((float)a.width + ((float)a.refreshRate * 0.1f)).CompareTo((float)b.width + ((float)b.refreshRate * 0.1f));
             });
+            int initialValue = 0;
             foreach (Resolution resolution in resolutions)
             {
                 options.Add(string.Format(format, resolution.width, resolution.height, resolution.refreshRate));
+                if (resolution.width == Screen.currentResolution.width &&
+                    resolution.height == Screen.currentResolution.height &&
+                    resolution.refreshRate == Screen.currentResolution.refreshRate)
+                {
+                    initialValue = options.Count - 1;
+                }
             }
             if (dropdown != null)
             {
                 dropdown.ClearOptions();
                 dropdown.AddOptions(options);
+                dropdown.SetValueWithoutNotify(initialValue);
             }
+            if (text != null)
+                text.text = string.Format(format, Screen.currentResolution.width, Screen.currentResolution.height, Screen.currentResolution.refreshRate);
         }
 
         public void OnClickPrevious()
@@ -73,6 +84,7 @@ namespace GraphicSettings
             currentSetting = value;
             if (text != null)
                 text.text = options[value];
+            Screen.SetResolution(Screen.resolutions[value].width, Screen.resolutions[value].height, Screen.fullScreenMode, Screen.resolutions[value].refreshRate);
         }
     }
 }
