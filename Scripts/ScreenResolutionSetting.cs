@@ -39,12 +39,7 @@ namespace GraphicSettings
         public void UpdateOptions()
         {
             options.Clear();
-            List<Resolution> resolutions = new List<Resolution>(Screen.resolutions);
-            resolutions.Sort((a, b) =>
-            {
-                return ((float)a.width + ((float)a.refreshRate * 0.1f)).CompareTo((float)b.width + ((float)b.refreshRate * 0.1f));
-            });
-            foreach (Resolution resolution in resolutions)
+            foreach (Resolution resolution in Screen.resolutions)
             {
                 options.Add(string.Format(format, resolution.width, resolution.height, resolution.refreshRate));
                 if (resolution.width == Screen.currentResolution.width &&
