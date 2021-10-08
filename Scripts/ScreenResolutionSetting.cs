@@ -44,7 +44,6 @@ namespace GraphicSettings
             {
                 return ((float)a.width + ((float)a.refreshRate * 0.1f)).CompareTo((float)b.width + ((float)b.refreshRate * 0.1f));
             });
-            int initialValue = 0;
             foreach (Resolution resolution in resolutions)
             {
                 options.Add(string.Format(format, resolution.width, resolution.height, resolution.refreshRate));
@@ -52,14 +51,14 @@ namespace GraphicSettings
                     resolution.height == Screen.currentResolution.height &&
                     resolution.refreshRate == Screen.currentResolution.refreshRate)
                 {
-                    initialValue = options.Count - 1;
+                    currentSetting = options.Count - 1;
                 }
             }
             if (dropdown != null)
             {
                 dropdown.ClearOptions();
                 dropdown.AddOptions(options);
-                dropdown.SetValueWithoutNotify(initialValue);
+                dropdown.SetValueWithoutNotify(currentSetting);
             }
             if (text != null)
                 text.text = string.Format(format, Screen.currentResolution.width, Screen.currentResolution.height, Screen.currentResolution.refreshRate);
