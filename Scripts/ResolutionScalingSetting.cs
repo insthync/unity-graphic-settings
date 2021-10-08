@@ -20,7 +20,7 @@ namespace GraphicSettings
             slider.onValueChanged.RemoveListener(OnValueChanged);
         }
 
-        private void OnValueChanged(float value)
+        public void OnValueChanged(float value)
         {
             QualitySettings.resolutionScalingFixedDPIFactor = value;
         }
