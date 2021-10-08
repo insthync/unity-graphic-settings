@@ -9,6 +9,7 @@ namespace GraphicSettings
         public Dropdown dropdown;
         public Text text;
         public string format = "{0}x{1} @ {2}Hz";
+        public string refreshRateSaveKey = "REFRESH_RATE";
         private FullScreenMode dirtyFullScreenMode;
         private List<string> options = new List<string>();
         private int currentSetting;
@@ -38,13 +39,14 @@ namespace GraphicSettings
 
         public void UpdateOptions()
         {
+            currentSetting = 0;
             options.Clear();
             foreach (Resolution resolution in Screen.resolutions)
             {
                 options.Add(string.Format(format, resolution.width, resolution.height, resolution.refreshRate));
-                if (resolution.width == Screen.currentResolution.width &&
-                    resolution.height == Screen.currentResolution.height &&
-                    resolution.refreshRate == Screen.currentResolution.refreshRate)
+                if (resolution.width == Screen.width &&
+                    resolution.height == Screen.height &&
+                    resolution.refreshRate == PlayerPrefs.GetInt(refreshRateSaveKey))
                 {
                     currentSetting = options.Count - 1;
                 }
@@ -56,7 +58,7 @@ namespace GraphicSettings
                 dropdown.SetValueWithoutNotify(currentSetting);
             }
             if (text != null)
-                text.text = string.Format(format, Screen.currentResolution.width, Screen.currentResolution.height, Screen.currentResolution.refreshRate);
+                text.text = options[currentSetting];
         }
 
         public void OnClickPrevious()
@@ -78,7 +80,10 @@ namespace GraphicSettings
             currentSetting = value;
             if (text != null)
                 text.text = options[value];
-            Screen.SetResolution(Screen.resolutions[value].width, Screen.resolutions[value].height, Screen.fullScreenMode, Screen.resolutions[value].refreshRate);
+            int refreshRate = Screen.resolutions[value].refreshRate;
+            PlayerPrefs.SetInt(refreshRateSaveKey, refreshRate);
+            PlayerPrefs.Save();
+            Screen.SetResolution(Screen.resolutions[value].width, Screen.resolutions[value].height, Screen.fullScreenMode, refreshRate);
         }
     }
 }
