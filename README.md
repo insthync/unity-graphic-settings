@@ -1,2 +1,2 @@
-# unity-video-settings
-Generic video settings UI components
+# unity-graphic-settings
+Generic graphic settings UI components
