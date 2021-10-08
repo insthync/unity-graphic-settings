@@ -3,11 +3,15 @@ using UnityEngine.UI;
 
 namespace GraphicSettings
 {
-    public class FullScreenSetting : MonoBehaviour
+    public class FullScreenSetting : MonoBehaviour, IGraphicSetting
     {
         public FullScreenMode setting = FullScreenMode.ExclusiveFullScreen;
         public Toggle toggle;
         public Button button;
+        public bool applyImmediately = true;
+        public bool ApplyImmediately { get { return applyImmediately; } set { applyImmediately = value; } }
+
+        private bool isOn;
 
         private void Start()
         {
@@ -30,13 +34,21 @@ namespace GraphicSettings
 
         public void OnToggle(bool isOn)
         {
+            this.isOn = isOn;
             if (isOn)
                 OnClick();
         }
 
         public void OnClick()
         {
-            Screen.fullScreenMode = setting;
+            if (ApplyImmediately)
+                Apply();
+        }
+
+        public void Apply()
+        {
+            if (isOn)
+                Screen.fullScreenMode = setting;
         }
     }
 }

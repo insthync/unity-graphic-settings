@@ -4,12 +4,15 @@ using UnityEngine.UI;
 
 namespace GraphicSettings
 {
-    public class ScreenResolutionSetting : MonoBehaviour
+    public class ScreenResolutionSetting : MonoBehaviour, IGraphicSetting
     {
         public Dropdown dropdown;
         public Text text;
         public string format = "{0}x{1} @ {2}Hz";
         public string refreshRateSaveKey = "REFRESH_RATE";
+        public bool applyImmediately = true;
+        public bool ApplyImmediately { get { return applyImmediately; } set { applyImmediately = value; } }
+
         private FullScreenMode dirtyFullScreenMode;
         private List<string> options = new List<string>();
         private int currentSetting;
@@ -80,10 +83,16 @@ namespace GraphicSettings
             currentSetting = value;
             if (text != null)
                 text.text = options[value];
-            int refreshRate = Screen.resolutions[value].refreshRate;
+            if (ApplyImmediately)
+                Apply();
+        }
+
+        public void Apply()
+        {
+            int refreshRate = Screen.resolutions[currentSetting].refreshRate;
             PlayerPrefs.SetInt(refreshRateSaveKey, refreshRate);
             PlayerPrefs.Save();
-            Screen.SetResolution(Screen.resolutions[value].width, Screen.resolutions[value].height, Screen.fullScreenMode, refreshRate);
+            Screen.SetResolution(Screen.resolutions[currentSetting].width, Screen.resolutions[currentSetting].height, Screen.fullScreenMode, refreshRate);
         }
     }
 }

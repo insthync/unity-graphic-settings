@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace GraphicSettings
 {
-    public class AntiAliasingSetting : MonoBehaviour
+    public class AntiAliasingSetting : MonoBehaviour, IGraphicSetting
     {
         public enum Setting : int
         {
@@ -15,6 +15,10 @@ namespace GraphicSettings
         public Setting setting = Setting.Disabled;
         public Toggle toggle;
         public Button button;
+        public bool applyImmediately = true;
+        public bool ApplyImmediately { get { return applyImmediately; } set { applyImmediately = value; } }
+
+        private bool isOn;
 
         private void Start()
         {
@@ -37,13 +41,21 @@ namespace GraphicSettings
 
         public void OnToggle(bool isOn)
         {
+            this.isOn = isOn;
             if (isOn)
                 OnClick();
         }
 
         public void OnClick()
         {
-            QualitySettings.antiAliasing = (int)setting;
+            if (ApplyImmediately)
+                Apply();
+        }
+
+        public void Apply()
+        {
+            if (isOn)
+                QualitySettings.antiAliasing = (int)setting;
         }
     }
 }

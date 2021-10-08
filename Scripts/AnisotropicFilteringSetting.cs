@@ -3,11 +3,15 @@ using UnityEngine.UI;
 
 namespace GraphicSettings
 {
-    public class AnisotropicFilteringSetting : MonoBehaviour
+    public class AnisotropicFilteringSetting : MonoBehaviour, IGraphicSetting
     {
         public AnisotropicFiltering setting = AnisotropicFiltering.Disable;
         public Toggle toggle;
         public Button button;
+        public bool applyImmediately = true;
+        public bool ApplyImmediately { get { return applyImmediately; } set { applyImmediately = value; } }
+
+        private bool isOn;
 
         private void Start()
         {
@@ -30,13 +34,21 @@ namespace GraphicSettings
 
         public void OnToggle(bool isOn)
         {
+            this.isOn = isOn;
             if (isOn)
                 OnClick();
         }
 
         public void OnClick()
         {
-            QualitySettings.anisotropicFiltering = setting;
+            if (ApplyImmediately)
+                Apply();
+        }
+
+        public void Apply()
+        {
+            if (isOn)
+                QualitySettings.anisotropicFiltering = setting;
         }
     }
 }

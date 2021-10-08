@@ -3,9 +3,11 @@ using UnityEngine.UI;
 
 namespace GraphicSettings
 {
-    public class ResolutionScalingSetting : MonoBehaviour
+    public class ResolutionScalingSetting : MonoBehaviour, IGraphicSetting
     {
         public Slider slider;
+        public bool applyImmediately = true;
+        public bool ApplyImmediately { get { return applyImmediately; } set { applyImmediately = value; } }
 
         private void Start()
         {
@@ -22,7 +24,13 @@ namespace GraphicSettings
 
         public void OnValueChanged(float value)
         {
-            QualitySettings.resolutionScalingFixedDPIFactor = value;
+            if (ApplyImmediately)
+                Apply();
+        }
+
+        public void Apply()
+        {
+            QualitySettings.resolutionScalingFixedDPIFactor = slider.value;
         }
     }
 }
