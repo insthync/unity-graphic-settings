@@ -4,7 +4,14 @@ namespace GraphicSettings
 {
     public class TextureQualitySetting : MonoBehaviour
     {
-        public int value = 0;
+        public enum Setting : int
+        {
+            FullRes = 0,
+            HalfRes = 1,
+            QuaterRes = 2,
+            EighthRes = 3,
+        }
+        public Setting setting = Setting.FullRes;
 
         public void OnToggle(bool isOn)
         {
@@ -14,7 +21,7 @@ namespace GraphicSettings
 
         public void OnClick()
         {
-            QualitySettings.masterTextureLimit = 0;
+            QualitySettings.masterTextureLimit = (int)setting;
         }
     }
 }
