@@ -6,10 +6,10 @@ namespace GraphicSettings
 {
     public class ScreenResolutionSetting : MonoBehaviour, IGraphicSetting
     {
+        public const string SAVE_KEY_REFRESH_RATE = "GRAPHIC_SETTING_REFRESH_RATE";
         public Dropdown dropdown;
         public Text text;
         public string format = "{0}x{1} @ {2}Hz";
-        public string refreshRateSaveKey = "REFRESH_RATE";
         public bool applyImmediately = true;
         public bool ApplyImmediately { get { return applyImmediately; } set { applyImmediately = value; } }
 
@@ -49,7 +49,7 @@ namespace GraphicSettings
                 options.Add(string.Format(format, resolution.width, resolution.height, resolution.refreshRate));
                 if (resolution.width == Screen.width &&
                     resolution.height == Screen.height &&
-                    resolution.refreshRate == PlayerPrefs.GetInt(refreshRateSaveKey))
+                    resolution.refreshRate == PlayerPrefs.GetInt(SAVE_KEY_REFRESH_RATE))
                 {
                     currentSetting = options.Count - 1;
                 }
@@ -90,7 +90,7 @@ namespace GraphicSettings
         public void Apply()
         {
             int refreshRate = Screen.resolutions[currentSetting].refreshRate;
-            PlayerPrefs.SetInt(refreshRateSaveKey, refreshRate);
+            PlayerPrefs.SetInt(SAVE_KEY_REFRESH_RATE, refreshRate);
             PlayerPrefs.Save();
             Screen.SetResolution(Screen.resolutions[currentSetting].width, Screen.resolutions[currentSetting].height, Screen.fullScreenMode, refreshRate);
         }

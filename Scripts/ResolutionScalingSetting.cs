@@ -5,6 +5,7 @@ namespace GraphicSettings
 {
     public class ResolutionScalingSetting : MonoBehaviour, IGraphicSetting
     {
+        public const string SAVE_KEY = "GRAPHIC_SETTING_RESOLUTION_SCALING";
         public Slider slider;
         public bool applyImmediately = true;
         public bool ApplyImmediately { get { return applyImmediately; } set { applyImmediately = value; } }
@@ -31,6 +32,14 @@ namespace GraphicSettings
         public void Apply()
         {
             QualitySettings.resolutionScalingFixedDPIFactor = slider.value;
+            PlayerPrefs.SetFloat(SAVE_KEY, slider.value);
+            PlayerPrefs.Save();
+        }
+
+        public static void Load()
+        {
+            if (PlayerPrefs.HasKey(SAVE_KEY))
+                QualitySettings.resolutionScalingFixedDPIFactor = PlayerPrefs.GetFloat(SAVE_KEY);
         }
     }
 }

@@ -12,6 +12,7 @@ namespace GraphicSettings
             x4 = 4,
             x8 = 8,
         }
+        public const string SAVE_KEY = "GRAPHIC_SETTING_ANTI_ALIASING";
         public Setting setting = Setting.Disabled;
         public Toggle toggle;
         public Button button;
@@ -55,7 +56,17 @@ namespace GraphicSettings
         public void Apply()
         {
             if (isOn)
+            {
                 QualitySettings.antiAliasing = (int)setting;
+                PlayerPrefs.SetInt(SAVE_KEY, (int)setting);
+                PlayerPrefs.Save();
+            }
+        }
+
+        public static void Load()
+        {
+            if (PlayerPrefs.HasKey(SAVE_KEY))
+                QualitySettings.antiAliasing = PlayerPrefs.GetInt(SAVE_KEY);
         }
     }
 }

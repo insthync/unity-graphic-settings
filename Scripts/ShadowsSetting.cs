@@ -5,6 +5,7 @@ namespace GraphicSettings
 {
     public class ShadowsSetting : MonoBehaviour, IGraphicSetting
     {
+        public const string SAVE_KEY = "GRAPHIC_SETTING_SHADOWS";
         public ShadowQuality setting = ShadowQuality.Disable;
         public Toggle toggle;
         public Button button;
@@ -48,7 +49,17 @@ namespace GraphicSettings
         public void Apply()
         {
             if (isOn)
+            {
                 QualitySettings.shadows = setting;
+                PlayerPrefs.SetInt(SAVE_KEY, (int)setting);
+                PlayerPrefs.Save();
+            }
+        }
+
+        public static void Load()
+        {
+            if (PlayerPrefs.HasKey(SAVE_KEY))
+                QualitySettings.shadows = (ShadowQuality)PlayerPrefs.GetInt(SAVE_KEY);
         }
     }
 }

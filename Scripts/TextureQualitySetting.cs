@@ -12,6 +12,7 @@ namespace GraphicSettings
             QuaterRes = 2,
             EighthRes = 3,
         }
+        public const string SAVE_KEY = "GRAPHIC_SETTING_TEXTURE_QUALITY";
         public Setting setting = Setting.FullRes;
         public Toggle toggle;
         public Button button;
@@ -55,7 +56,17 @@ namespace GraphicSettings
         public void Apply()
         {
             if (isOn)
+            {
                 QualitySettings.masterTextureLimit = (int)setting;
+                PlayerPrefs.SetInt(SAVE_KEY, (int)setting);
+                PlayerPrefs.Save();
+            }
+        }
+
+        public static void Load()
+        {
+            if (PlayerPrefs.HasKey(SAVE_KEY))
+                QualitySettings.masterTextureLimit = PlayerPrefs.GetInt(SAVE_KEY);
         }
     }
 }

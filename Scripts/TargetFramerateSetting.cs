@@ -5,6 +5,7 @@ namespace GraphicSettings
 {
     public class TargetFramerateSetting : MonoBehaviour, IGraphicSetting
     {
+        public const string SAVE_KEY = "GRAPHIC_SETTING_TARGET_FRAME_RATE";
         public int setting = 60;
         public Toggle toggle;
         public Button button;
@@ -48,7 +49,17 @@ namespace GraphicSettings
         public void Apply()
         {
             if (isOn)
+            {
                 Application.targetFrameRate = setting;
+                PlayerPrefs.SetInt(SAVE_KEY, setting);
+                PlayerPrefs.Save();
+            }
+        }
+
+        public static void Load()
+        {
+            if (PlayerPrefs.HasKey(SAVE_KEY))
+                Application.targetFrameRate = PlayerPrefs.GetInt(SAVE_KEY);
         }
     }
 }
