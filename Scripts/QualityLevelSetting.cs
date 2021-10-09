@@ -6,6 +6,7 @@ namespace GraphicSettings
     public class QualityLevelSetting : MonoBehaviour, IGraphicSetting
     {
         public const string SAVE_KEY = "GRAPHIC_SETTING_QUALITY_LEVEL";
+        public const string SAVE_KEY_CUSTOM_LEVEL = "GRAPHIC_SETTING_QUALITY_LEVEL_CUSTOM";
         public int setting;
         public Toggle toggle;
         public Button button;
@@ -52,6 +53,7 @@ namespace GraphicSettings
             {
                 QualitySettings.SetQualityLevel(setting);
                 PlayerPrefs.SetInt(SAVE_KEY, setting);
+                PlayerPrefs.SetInt(SAVE_KEY_CUSTOM_LEVEL, 0);
                 PlayerPrefs.Save();
             }
         }
@@ -60,6 +62,17 @@ namespace GraphicSettings
         {
             if (PlayerPrefs.HasKey(SAVE_KEY))
                 QualitySettings.SetQualityLevel(PlayerPrefs.GetInt(SAVE_KEY));
+        }
+
+        public static void MarkAsCustomLevel()
+        {
+            PlayerPrefs.SetInt(SAVE_KEY_CUSTOM_LEVEL, 1);
+            PlayerPrefs.Save();
+        }
+
+        public static bool IsCustomQualityLevel()
+        {
+            return PlayerPrefs.GetInt(SAVE_KEY_CUSTOM_LEVEL, 0) > 1;
         }
     }
 }

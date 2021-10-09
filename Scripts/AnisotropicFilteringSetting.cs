@@ -53,12 +53,13 @@ namespace GraphicSettings
                 QualitySettings.anisotropicFiltering = setting;
                 PlayerPrefs.SetInt(SAVE_KEY, (int)setting);
                 PlayerPrefs.Save();
+                QualityLevelSetting.MarkAsCustomLevel();
             }
         }
 
         public static void Load()
         {
-            if (PlayerPrefs.HasKey(SAVE_KEY))
+            if (PlayerPrefs.HasKey(SAVE_KEY) && QualityLevelSetting.IsCustomQualityLevel())
                 QualitySettings.anisotropicFiltering = (AnisotropicFiltering)PlayerPrefs.GetInt(SAVE_KEY);
         }
     }

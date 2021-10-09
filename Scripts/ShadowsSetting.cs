@@ -53,12 +53,13 @@ namespace GraphicSettings
                 QualitySettings.shadows = setting;
                 PlayerPrefs.SetInt(SAVE_KEY, (int)setting);
                 PlayerPrefs.Save();
+                QualityLevelSetting.MarkAsCustomLevel();
             }
         }
 
         public static void Load()
         {
-            if (PlayerPrefs.HasKey(SAVE_KEY))
+            if (PlayerPrefs.HasKey(SAVE_KEY) && QualityLevelSetting.IsCustomQualityLevel())
                 QualitySettings.shadows = (ShadowQuality)PlayerPrefs.GetInt(SAVE_KEY);
         }
     }

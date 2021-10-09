@@ -34,11 +34,12 @@ namespace GraphicSettings
             QualitySettings.shadowDistance = slider.value;
             PlayerPrefs.SetFloat(SAVE_KEY, slider.value);
             PlayerPrefs.Save();
+            QualityLevelSetting.MarkAsCustomLevel();
         }
 
         public static void Load()
         {
-            if (PlayerPrefs.HasKey(SAVE_KEY))
+            if (PlayerPrefs.HasKey(SAVE_KEY) && QualityLevelSetting.IsCustomQualityLevel())
                 QualitySettings.shadowDistance = PlayerPrefs.GetFloat(SAVE_KEY);
         }
     }

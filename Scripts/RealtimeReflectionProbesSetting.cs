@@ -53,12 +53,13 @@ namespace GraphicSettings
                 QualitySettings.realtimeReflectionProbes = setting;
                 PlayerPrefs.SetInt(SAVE_KEY, setting ? 1 : 0);
                 PlayerPrefs.Save();
+                QualityLevelSetting.MarkAsCustomLevel();
             }
         }
 
         public static void Load()
         {
-            if (PlayerPrefs.HasKey(SAVE_KEY))
+            if (PlayerPrefs.HasKey(SAVE_KEY) && QualityLevelSetting.IsCustomQualityLevel())
                 QualitySettings.realtimeReflectionProbes = PlayerPrefs.GetInt(SAVE_KEY) > 0;
         }
     }
