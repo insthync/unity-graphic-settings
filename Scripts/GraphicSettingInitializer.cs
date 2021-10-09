@@ -10,6 +10,9 @@
             AntiAliasingSetting.Load();
             TextureQualitySetting.Load();
             ShadowsSetting.Load();
+            ShadowDistanceSetting.Load();
+            SoftParticlesSetting.Load();
+            RealtimeReflectionProbesSetting.Load();
             TargetFramerateSetting.Load();
             ResolutionScalingSetting.Load();
         }
