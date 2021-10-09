@@ -72,7 +72,7 @@ namespace GraphicSettings
 
         public static bool IsCustomQualityLevel()
         {
-            return PlayerPrefs.GetInt(SAVE_KEY_CUSTOM_LEVEL, 0) > 1;
+            return PlayerPrefs.GetInt(SAVE_KEY_CUSTOM_LEVEL, 0) > 0;
         }
     }
 }
