@@ -5,6 +5,7 @@ namespace GraphicSettings
 {
     public class FullScreenSetting : MonoBehaviour, IGraphicSetting
     {
+        public const string SAVE_KEY = "GRAPHIC_SETTING_FULL_SCREEN_MODE";
         public FullScreenMode setting = FullScreenMode.ExclusiveFullScreen;
         public Toggle toggle;
         public Button button;
@@ -48,7 +49,17 @@ namespace GraphicSettings
         public void Apply()
         {
             if (isOn)
+            {
                 Screen.fullScreenMode = setting;
+                PlayerPrefs.SetInt(SAVE_KEY, (int)setting);
+                PlayerPrefs.Save();
+            }
+        }
+
+        public static void Load()
+        {
+            if (PlayerPrefs.HasKey(SAVE_KEY))
+                Screen.fullScreenMode = (FullScreenMode)PlayerPrefs.GetInt(SAVE_KEY);
         }
     }
 }

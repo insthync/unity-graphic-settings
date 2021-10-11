@@ -6,6 +6,8 @@ namespace GraphicSettings
 {
     public class ScreenResolutionSetting : MonoBehaviour, IGraphicSetting
     {
+        public const string SAVE_KEY_SCREEN_WIDTH = "GRAPHIC_SETTING_SCREEN_WIDTH";
+        public const string SAVE_KEY_SCREEN_HEIGHT = "GRAPHIC_SETTING_SCREEN_HEIGHT";
         public const string SAVE_KEY_REFRESH_RATE = "GRAPHIC_SETTING_REFRESH_RATE";
         public Dropdown dropdown;
         public Text text;
@@ -89,10 +91,22 @@ namespace GraphicSettings
 
         public void Apply()
         {
+            int screenWidth = Screen.resolutions[currentSetting].width;
+            int screenHeight = Screen.resolutions[currentSetting].height;
             int refreshRate = Screen.resolutions[currentSetting].refreshRate;
+            PlayerPrefs.SetInt(SAVE_KEY_SCREEN_WIDTH, screenWidth);
+            PlayerPrefs.SetInt(SAVE_KEY_SCREEN_HEIGHT, screenHeight);
             PlayerPrefs.SetInt(SAVE_KEY_REFRESH_RATE, refreshRate);
             PlayerPrefs.Save();
-            Screen.SetResolution(Screen.resolutions[currentSetting].width, Screen.resolutions[currentSetting].height, Screen.fullScreenMode, refreshRate);
+            Screen.SetResolution(screenWidth, screenHeight, Screen.fullScreenMode, refreshRate);
+        }
+
+        public static void Load()
+        {
+            if (PlayerPrefs.HasKey(SAVE_KEY_SCREEN_WIDTH) &&
+                PlayerPrefs.HasKey(SAVE_KEY_SCREEN_HEIGHT) &&
+                PlayerPrefs.HasKey(SAVE_KEY_REFRESH_RATE))
+                Screen.SetResolution(PlayerPrefs.GetInt(SAVE_KEY_SCREEN_WIDTH), PlayerPrefs.GetInt(SAVE_KEY_SCREEN_HEIGHT), Screen.fullScreenMode, PlayerPrefs.GetInt(SAVE_KEY_REFRESH_RATE));
         }
     }
 }

@@ -5,6 +5,8 @@
         [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void Initialize()
         {
+            FullScreenSetting.Load();
+            ScreenResolutionSetting.Load();
             QualityLevelSetting.Load();
             AnisotropicFilteringSetting.Load();
             AntiAliasingSetting.Load();
