@@ -21,7 +21,9 @@ namespace GraphicSettings
             if (currentIndex >= qualitySettings.Length)
             {
                 currentIndex = 0;
-                Apply();
+                UpdateValue();
+                if (ApplyImmediately)
+                    Apply();
             }
             if (text != null)
                 text.text = qualitySettings[currentIndex];
@@ -30,15 +32,21 @@ namespace GraphicSettings
         public void OnClick()
         {
             currentIndex++;
-            Apply();
+            UpdateValue();
+            if (ApplyImmediately)
+                Apply();
         }
 
-        public void Apply()
+        private void UpdateValue()
         {
             if (currentIndex >= qualitySettings.Length)
                 currentIndex = 0;
             if (text != null)
                 text.text = qualitySettings[currentIndex];
+        }
+
+        public void Apply()
+        {
             QualitySettings.SetQualityLevel(currentIndex);
             PlayerPrefs.SetInt(QualityLevelSetting.SAVE_KEY, currentIndex);
             PlayerPrefs.SetInt(QualityLevelSetting.SAVE_KEY_CUSTOM_LEVEL, 0);

@@ -44,7 +44,10 @@ namespace GraphicSettings
         public void OnClick()
         {
             if (ApplyImmediately)
+            {
+                isOn = true;
                 Apply();
+            }
         }
 
         public void Apply()
