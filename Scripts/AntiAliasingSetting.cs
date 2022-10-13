@@ -19,7 +19,7 @@ namespace GraphicSettings
         public bool applyImmediately = true;
         public bool ApplyImmediately { get { return applyImmediately; } set { applyImmediately = value; } }
 
-        private bool isOn;
+        private bool _isOn;
 
         private void Start()
         {
@@ -42,7 +42,7 @@ namespace GraphicSettings
 
         public void OnToggle(bool isOn)
         {
-            this.isOn = isOn;
+            this._isOn = isOn;
             if (isOn)
                 OnClick();
         }
@@ -51,14 +51,14 @@ namespace GraphicSettings
         {
             if (ApplyImmediately)
             {
-                isOn = true;
+                _isOn = true;
                 Apply();
             }
         }
 
         public void Apply()
         {
-            if (isOn)
+            if (_isOn)
             {
                 QualitySettings.antiAliasing = (int)setting;
                 PlayerPrefs.SetInt(SAVE_KEY, (int)setting);

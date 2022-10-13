@@ -11,12 +11,12 @@ namespace GraphicSettings
         public string[] qualitySettings = new string[] { "Low", "Medium", "High" };
         public int currentIndex = 0;
         public Text text;
-        private Button button;
+        private Button _button;
 
         private void Awake()
         {
-            button = GetComponent<Button>();
-            button.onClick.AddListener(OnClick);
+            _button = GetComponent<Button>();
+            _button.onClick.AddListener(OnClick);
             currentIndex = QualitySettings.GetQualityLevel();
             if (currentIndex >= qualitySettings.Length)
             {

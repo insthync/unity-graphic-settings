@@ -4,16 +4,16 @@ namespace GraphicSettings
 {
     public class GraphicSettingManager : MonoBehaviour
     {
-        private IGraphicSetting[] graphicSettings;
+        private IGraphicSetting[] _graphicSettings;
 
         private void Start()
         {
-            graphicSettings = GetComponentsInChildren<IGraphicSetting>(true);
+            _graphicSettings = GetComponentsInChildren<IGraphicSetting>(true);
         }
 
         public void Apply()
         {
-            foreach (IGraphicSetting graphicSetting in graphicSettings)
+            foreach (IGraphicSetting graphicSetting in _graphicSettings)
             {
                 graphicSetting.Apply();
             }

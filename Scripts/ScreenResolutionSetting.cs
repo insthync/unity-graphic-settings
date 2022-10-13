@@ -15,16 +15,16 @@ namespace GraphicSettings
         public bool applyImmediately = true;
         public bool ApplyImmediately { get { return applyImmediately; } set { applyImmediately = value; } }
 
-        private FullScreenMode dirtyFullScreenMode;
-        private List<string> options = new List<string>();
-        private int currentSetting;
+        private FullScreenMode _dirtyFullScreenMode;
+        private List<string> _options = new List<string>();
+        private int _currentSetting;
 
         private void Start()
         {
             if (dropdown != null)
                 dropdown.onValueChanged.AddListener(OnValueChanged);
             UpdateOptions();
-            dirtyFullScreenMode = Screen.fullScreenMode;
+            _dirtyFullScreenMode = Screen.fullScreenMode;
         }
 
         private void OnDestroy()
@@ -35,65 +35,65 @@ namespace GraphicSettings
 
         private void Update()
         {
-            if (dirtyFullScreenMode != Screen.fullScreenMode)
+            if (_dirtyFullScreenMode != Screen.fullScreenMode)
             {
-                dirtyFullScreenMode = Screen.fullScreenMode;
+                _dirtyFullScreenMode = Screen.fullScreenMode;
                 UpdateOptions();
             }
         }
 
         public void UpdateOptions()
         {
-            currentSetting = 0;
-            options.Clear();
+            _currentSetting = 0;
+            _options.Clear();
             foreach (Resolution resolution in Screen.resolutions)
             {
-                options.Add(string.Format(format, resolution.width, resolution.height, resolution.refreshRate));
+                _options.Add(string.Format(format, resolution.width, resolution.height, resolution.refreshRate));
                 if (resolution.width == Screen.width &&
                     resolution.height == Screen.height &&
                     resolution.refreshRate == PlayerPrefs.GetInt(SAVE_KEY_REFRESH_RATE))
                 {
-                    currentSetting = options.Count - 1;
+                    _currentSetting = _options.Count - 1;
                 }
             }
             if (dropdown != null)
             {
                 dropdown.ClearOptions();
-                dropdown.AddOptions(options);
-                dropdown.SetValueWithoutNotify(currentSetting);
+                dropdown.AddOptions(_options);
+                dropdown.SetValueWithoutNotify(_currentSetting);
             }
             if (text != null)
-                text.text = options[currentSetting];
+                text.text = _options[_currentSetting];
         }
 
         public void OnClickPrevious()
         {
-            OnValueChanged(currentSetting - 1);
+            OnValueChanged(_currentSetting - 1);
         }
 
         public void OnClickNext()
         {
-            OnValueChanged(currentSetting + 1);
+            OnValueChanged(_currentSetting + 1);
         }
 
         public void OnValueChanged(int value)
         {
             if (value < 0)
                 value = 0;
-            if (value >= options.Count)
-                value = options.Count - 1;
-            currentSetting = value;
+            if (value >= _options.Count)
+                value = _options.Count - 1;
+            _currentSetting = value;
             if (text != null)
-                text.text = options[value];
+                text.text = _options[value];
             if (ApplyImmediately)
                 Apply();
         }
 
         public void Apply()
         {
-            int screenWidth = Screen.resolutions[currentSetting].width;
-            int screenHeight = Screen.resolutions[currentSetting].height;
-            int refreshRate = Screen.resolutions[currentSetting].refreshRate;
+            int screenWidth = Screen.resolutions[_currentSetting].width;
+            int screenHeight = Screen.resolutions[_currentSetting].height;
+            int refreshRate = Screen.resolutions[_currentSetting].refreshRate;
             PlayerPrefs.SetInt(SAVE_KEY_SCREEN_WIDTH, screenWidth);
             PlayerPrefs.SetInt(SAVE_KEY_SCREEN_HEIGHT, screenHeight);
             PlayerPrefs.SetInt(SAVE_KEY_REFRESH_RATE, refreshRate);
