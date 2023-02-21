@@ -12,6 +12,7 @@ namespace GraphicSettings
         public Dropdown dropdown;
         public Text text;
         public string format = "{0}x{1} @ {2}Hz";
+        public string customFormat = "{0}x{1} @ {2}Hz (Custom)";
         public bool applyImmediately = true;
         public bool ApplyImmediately { get { return applyImmediately; } set { applyImmediately = value; } }
 
@@ -44,17 +45,21 @@ namespace GraphicSettings
 
         public void UpdateOptions()
         {
-            _currentSetting = 0;
+            _currentSetting = -1;
             _options.Clear();
             foreach (Resolution resolution in Screen.resolutions)
             {
                 _options.Add(string.Format(format, resolution.width, resolution.height, resolution.refreshRate));
-                if (resolution.width == Screen.width &&
-                    resolution.height == Screen.height &&
-                    resolution.refreshRate == PlayerPrefs.GetInt(SAVE_KEY_REFRESH_RATE))
+                if (resolution.width == Screen.currentResolution.width &&
+                    resolution.height == Screen.currentResolution.height &&
+                    resolution.refreshRate == Screen.currentResolution.refreshRate)
                 {
                     _currentSetting = _options.Count - 1;
                 }
+            }
+            if (_currentSetting < 0)
+            {
+                _options.Add(string.Format(customFormat, Screen.currentResolution.width, Screen.currentResolution.height, Screen.currentResolution.refreshRate));
             }
             if (dropdown != null)
             {
@@ -99,6 +104,7 @@ namespace GraphicSettings
             PlayerPrefs.SetInt(SAVE_KEY_REFRESH_RATE, refreshRate);
             PlayerPrefs.Save();
             Screen.SetResolution(screenWidth, screenHeight, Screen.fullScreenMode, refreshRate);
+            UpdateOptions();
         }
 
         public static void Load()
