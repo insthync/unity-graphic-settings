@@ -18,6 +18,8 @@ namespace GraphicSettings
 
         private FullScreenMode _dirtyFullScreenMode;
         private List<string> _options = new List<string>();
+        private List<Resolution> _resolutions = new List<Resolution>();
+        private bool _hasCustomResolution;
         private int _currentSetting;
 
         private void Start()
@@ -46,13 +48,15 @@ namespace GraphicSettings
         public void UpdateOptions()
         {
             _currentSetting = -1;
+            _hasCustomResolution = false;
             _options.Clear();
+            _resolutions.Clear();
             foreach (Resolution resolution in Screen.resolutions)
             {
                 _options.Add(string.Format(format, resolution.width, resolution.height, resolution.refreshRate));
-                if (resolution.width == Screen.currentResolution.width &&
-                    resolution.height == Screen.currentResolution.height &&
-                    resolution.refreshRate == Screen.currentResolution.refreshRate)
+                _resolutions.Add(resolution);
+                if (resolution.width == Screen.width && resolution.height == Screen.height &&
+                    (!PlayerPrefs.HasKey(SAVE_KEY_REFRESH_RATE) || resolution.refreshRate == PlayerPrefs.GetInt(SAVE_KEY_REFRESH_RATE)))
                 {
                     _currentSetting = _options.Count - 1;
                 }
@@ -60,6 +64,14 @@ namespace GraphicSettings
             if (_currentSetting < 0)
             {
                 _options.Add(string.Format(customFormat, Screen.currentResolution.width, Screen.currentResolution.height, Screen.currentResolution.refreshRate));
+                _resolutions.Add(new Resolution()
+                {
+                    width = Screen.currentResolution.width,
+                    height = Screen.currentResolution.height,
+                    refreshRate = Screen.currentResolution.refreshRate,
+                });
+                _currentSetting = _options.Count - 1;
+                _hasCustomResolution = true;
             }
             if (dropdown != null)
             {
@@ -96,15 +108,19 @@ namespace GraphicSettings
 
         public void Apply()
         {
-            int screenWidth = Screen.resolutions[_currentSetting].width;
-            int screenHeight = Screen.resolutions[_currentSetting].height;
-            int refreshRate = Screen.resolutions[_currentSetting].refreshRate;
+            int screenWidth = _resolutions[_currentSetting].width;
+            int screenHeight = _resolutions[_currentSetting].height;
+            int refreshRate = _resolutions[_currentSetting].refreshRate;
+            if (_hasCustomResolution && _currentSetting < _resolutions.Count - 1)
+            {
+                _resolutions.RemoveAt(_resolutions.Count - 1);
+                _hasCustomResolution = false;
+            }
             PlayerPrefs.SetInt(SAVE_KEY_SCREEN_WIDTH, screenWidth);
             PlayerPrefs.SetInt(SAVE_KEY_SCREEN_HEIGHT, screenHeight);
             PlayerPrefs.SetInt(SAVE_KEY_REFRESH_RATE, refreshRate);
             PlayerPrefs.Save();
             Screen.SetResolution(screenWidth, screenHeight, Screen.fullScreenMode, refreshRate);
-            UpdateOptions();
         }
 
         public static void Load()
