@@ -10,7 +10,9 @@ namespace GraphicSettings
         public const string SAVE_KEY_SCREEN_HEIGHT = "GRAPHIC_SETTING_SCREEN_HEIGHT";
         public const string SAVE_KEY_REFRESH_RATE = "GRAPHIC_SETTING_REFRESH_RATE";
         public Dropdown dropdown;
+        public TMPro.TMP_Dropdown tmpDropdown;
         public Text text;
+        public TMPro.TMP_Text tmpText;
         public string format = "{0}x{1} @ {2}Hz";
         public string customFormat = "{0}x{1} @ {2}Hz (Custom)";
         public bool applyImmediately = true;
@@ -26,6 +28,8 @@ namespace GraphicSettings
         {
             if (dropdown != null)
                 dropdown.onValueChanged.AddListener(OnValueChanged);
+            if (tmpDropdown != null)
+                tmpDropdown.onValueChanged.AddListener(OnValueChanged);
             UpdateOptions();
             _dirtyFullScreenMode = Screen.fullScreenMode;
         }
@@ -34,6 +38,8 @@ namespace GraphicSettings
         {
             if (dropdown != null)
                 dropdown.onValueChanged.RemoveListener(OnValueChanged);
+            if (tmpDropdown != null)
+                tmpDropdown.onValueChanged.RemoveListener(OnValueChanged);
         }
 
         private void Update()
@@ -79,8 +85,16 @@ namespace GraphicSettings
                 dropdown.AddOptions(_options);
                 dropdown.SetValueWithoutNotify(_currentSetting);
             }
+            if (tmpDropdown != null)
+            {
+                tmpDropdown.ClearOptions();
+                tmpDropdown.AddOptions(_options);
+                tmpDropdown.SetValueWithoutNotify(_currentSetting);
+            }
             if (text != null)
                 text.text = _options[_currentSetting];
+            if (tmpText != null)
+                tmpText.text = _options[_currentSetting];
         }
 
         public void OnClickPrevious()
@@ -102,6 +116,8 @@ namespace GraphicSettings
             _currentSetting = value;
             if (text != null)
                 text.text = _options[value];
+            if (tmpText != null)
+                tmpText.text = _options[value];
             if (ApplyImmediately)
                 Apply();
         }
