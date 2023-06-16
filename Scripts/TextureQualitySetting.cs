@@ -25,7 +25,11 @@ namespace GraphicSettings
         {
             if (toggle != null)
             {
+#if UNITY_2021_3_OR_NEWER
+                toggle.SetIsOnWithoutNotify(QualitySettings.globalTextureMipmapLimit == (int)setting);
+#else
                 toggle.SetIsOnWithoutNotify(QualitySettings.masterTextureLimit == (int)setting);
+#endif
                 toggle.onValueChanged.AddListener(OnToggle);
             }
             if (button != null)
@@ -60,7 +64,11 @@ namespace GraphicSettings
         {
             if (_isOn)
             {
+#if UNITY_2021_3_OR_NEWER
+                QualitySettings.globalTextureMipmapLimit = (int)setting;
+#else
                 QualitySettings.masterTextureLimit = (int)setting;
+#endif
                 PlayerPrefs.SetInt(SAVE_KEY, (int)setting);
                 PlayerPrefs.Save();
                 QualityLevelSetting.MarkAsCustomLevel();
@@ -70,7 +78,13 @@ namespace GraphicSettings
         public static void Load()
         {
             if (PlayerPrefs.HasKey(SAVE_KEY) && QualityLevelSetting.IsCustomQualityLevel())
+            {
+#if UNITY_2021_3_OR_NEWER
+                QualitySettings.globalTextureMipmapLimit = PlayerPrefs.GetInt(SAVE_KEY);
+#else
                 QualitySettings.masterTextureLimit = PlayerPrefs.GetInt(SAVE_KEY);
+#endif
+            }
         }
     }
 }
