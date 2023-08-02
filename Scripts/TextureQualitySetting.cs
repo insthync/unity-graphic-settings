@@ -25,7 +25,7 @@ namespace GraphicSettings
         {
             if (toggle != null)
             {
-#if UNITY_2021_3_OR_NEWER
+#if UNITY_2022_2_OR_NEWER
                 toggle.SetIsOnWithoutNotify(QualitySettings.globalTextureMipmapLimit == (int)setting);
 #else
                 toggle.SetIsOnWithoutNotify(QualitySettings.masterTextureLimit == (int)setting);
@@ -64,7 +64,7 @@ namespace GraphicSettings
         {
             if (_isOn)
             {
-#if UNITY_2021_3_OR_NEWER
+#if UNITY_2022_2_OR_NEWER
                 QualitySettings.globalTextureMipmapLimit = (int)setting;
 #else
                 QualitySettings.masterTextureLimit = (int)setting;
@@ -79,7 +79,7 @@ namespace GraphicSettings
         {
             if (PlayerPrefs.HasKey(SAVE_KEY) && QualityLevelSetting.IsCustomQualityLevel())
             {
-#if UNITY_2021_3_OR_NEWER
+#if UNITY_2022_2_OR_NEWER
                 QualitySettings.globalTextureMipmapLimit = PlayerPrefs.GetInt(SAVE_KEY);
 #else
                 QualitySettings.masterTextureLimit = PlayerPrefs.GetInt(SAVE_KEY);
