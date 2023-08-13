@@ -8,7 +8,12 @@ namespace GraphicSettings
     {
         public const string SAVE_KEY_SCREEN_WIDTH = "GRAPHIC_SETTING_SCREEN_WIDTH";
         public const string SAVE_KEY_SCREEN_HEIGHT = "GRAPHIC_SETTING_SCREEN_HEIGHT";
+#if UNITY_2022_2_OR_NEWER
+        public const string SAVE_KEY_REFRESH_RATE_RATIO_NUMERATOR = "GRAPHIC_SETTING_REFRESH_RATE_RATIO_NUMERATOR";
+        public const string SAVE_KEY_REFRESH_RATE_RATIO_DENOMINATOR = "GRAPHIC_SETTING_REFRESH_RATE_RATIO_DENOMINATOR";
+#else
         public const string SAVE_KEY_REFRESH_RATE = "GRAPHIC_SETTING_REFRESH_RATE";
+#endif
         public Dropdown dropdown;
         public TMPro.TMP_Dropdown tmpDropdown;
         public Text text;
@@ -59,23 +64,54 @@ namespace GraphicSettings
             _resolutions.Clear();
             foreach (Resolution resolution in Screen.resolutions)
             {
-                _options.Add(string.Format(format, resolution.width, resolution.height, resolution.refreshRate));
+#if UNITY_2022_2_OR_NEWER
+                _options.Add(string.Format(format, resolution.width, resolution.height, resolution.refreshRateRatio.value.ToString("N2")));
+#else
+                _options.Add(string.Format(format, resolution.width, resolution.height, resolution.refreshRate.ToString("N2")));
+#endif
                 _resolutions.Add(resolution);
-                if (resolution.width == Screen.width && resolution.height == Screen.height &&
-                    (!PlayerPrefs.HasKey(SAVE_KEY_REFRESH_RATE) || resolution.refreshRate == PlayerPrefs.GetInt(SAVE_KEY_REFRESH_RATE)))
+                if (resolution.width != Screen.width || resolution.height != Screen.height)
+                    continue;
+
+#if UNITY_2022_2_OR_NEWER
+                if (!PlayerPrefs.HasKey(SAVE_KEY_REFRESH_RATE_RATIO_NUMERATOR) || !PlayerPrefs.HasKey(SAVE_KEY_REFRESH_RATE_RATIO_DENOMINATOR) || resolution.refreshRateRatio.Equals(new RefreshRate()
+                {
+                    numerator = (uint)PlayerPrefs.GetInt(SAVE_KEY_REFRESH_RATE_RATIO_NUMERATOR, 50),
+                    denominator = (uint)PlayerPrefs.GetInt(SAVE_KEY_REFRESH_RATE_RATIO_DENOMINATOR, 1),
+                }))
                 {
                     _currentSetting = _options.Count - 1;
                 }
+#else
+                if (!PlayerPrefs.HasKey(SAVE_KEY_REFRESH_RATE) || resolution.refreshRate == PlayerPrefs.GetInt(SAVE_KEY_REFRESH_RATE, 50))
+                {
+                    _currentSetting = _options.Count - 1;
+                }
+#endif
             }
             if (_currentSetting < 0)
             {
-                _options.Add(string.Format(customFormat, Screen.currentResolution.width, Screen.currentResolution.height, Screen.currentResolution.refreshRate));
+#if UNITY_2022_2_OR_NEWER
+                _options.Add(string.Format(customFormat, Screen.currentResolution.width, Screen.currentResolution.height, Screen.currentResolution.refreshRateRatio.value.ToString("N2")));
+#else
+                _options.Add(string.Format(customFormat, Screen.currentResolution.width, Screen.currentResolution.height, Screen.currentResolution.refreshRate.ToString("N2")));
+#endif
+
+#if UNITY_2022_2_OR_NEWER
+                _resolutions.Add(new Resolution()
+                {
+                    width = Screen.currentResolution.width,
+                    height = Screen.currentResolution.height,
+                    refreshRateRatio = Screen.currentResolution.refreshRateRatio,
+                });
+#else
                 _resolutions.Add(new Resolution()
                 {
                     width = Screen.currentResolution.width,
                     height = Screen.currentResolution.height,
                     refreshRate = Screen.currentResolution.refreshRate,
                 });
+#endif
                 _currentSetting = _options.Count - 1;
                 _hasCustomResolution = true;
             }
@@ -124,27 +160,47 @@ namespace GraphicSettings
 
         public void Apply()
         {
-            int screenWidth = _resolutions[_currentSetting].width;
-            int screenHeight = _resolutions[_currentSetting].height;
-            int refreshRate = _resolutions[_currentSetting].refreshRate;
             if (_hasCustomResolution && _currentSetting < _resolutions.Count - 1)
             {
                 _resolutions.RemoveAt(_resolutions.Count - 1);
                 _hasCustomResolution = false;
             }
+            int screenWidth = _resolutions[_currentSetting].width;
             PlayerPrefs.SetInt(SAVE_KEY_SCREEN_WIDTH, screenWidth);
+
+            int screenHeight = _resolutions[_currentSetting].height;
             PlayerPrefs.SetInt(SAVE_KEY_SCREEN_HEIGHT, screenHeight);
+#if UNITY_2022_2_OR_NEWER
+            RefreshRate refreshRateRatio = _resolutions[_currentSetting].refreshRateRatio;
+            PlayerPrefs.SetInt(SAVE_KEY_REFRESH_RATE_RATIO_NUMERATOR, (int)refreshRateRatio.numerator);
+            PlayerPrefs.SetInt(SAVE_KEY_REFRESH_RATE_RATIO_DENOMINATOR, (int)refreshRateRatio.denominator);
+            Screen.SetResolution(screenWidth, screenHeight, Screen.fullScreenMode, refreshRateRatio);
+#else
+            int refreshRate = _resolutions[_currentSetting].refreshRate;
             PlayerPrefs.SetInt(SAVE_KEY_REFRESH_RATE, refreshRate);
-            PlayerPrefs.Save();
             Screen.SetResolution(screenWidth, screenHeight, Screen.fullScreenMode, refreshRate);
+#endif
+            PlayerPrefs.Save();
         }
 
         public static void Load()
         {
-            if (PlayerPrefs.HasKey(SAVE_KEY_SCREEN_WIDTH) &&
-                PlayerPrefs.HasKey(SAVE_KEY_SCREEN_HEIGHT) &&
-                PlayerPrefs.HasKey(SAVE_KEY_REFRESH_RATE))
-                Screen.SetResolution(PlayerPrefs.GetInt(SAVE_KEY_SCREEN_WIDTH), PlayerPrefs.GetInt(SAVE_KEY_SCREEN_HEIGHT), Screen.fullScreenMode, PlayerPrefs.GetInt(SAVE_KEY_REFRESH_RATE));
+            if (!PlayerPrefs.HasKey(SAVE_KEY_SCREEN_WIDTH) || !PlayerPrefs.HasKey(SAVE_KEY_SCREEN_HEIGHT))
+                return;
+#if UNITY_2022_2_OR_NEWER
+            if (!PlayerPrefs.HasKey(SAVE_KEY_REFRESH_RATE_RATIO_NUMERATOR) || !PlayerPrefs.HasKey(SAVE_KEY_REFRESH_RATE_RATIO_DENOMINATOR))
+                return;
+            Screen.SetResolution(PlayerPrefs.GetInt(SAVE_KEY_SCREEN_WIDTH), PlayerPrefs.GetInt(SAVE_KEY_SCREEN_HEIGHT), Screen.fullScreenMode, new RefreshRate()
+            {
+                numerator = (uint)PlayerPrefs.GetInt(SAVE_KEY_REFRESH_RATE_RATIO_NUMERATOR),
+                denominator = (uint)PlayerPrefs.GetInt(SAVE_KEY_REFRESH_RATE_RATIO_DENOMINATOR),
+            });
+#else
+            if (!PlayerPrefs.HasKey(SAVE_KEY_REFRESH_RATE))
+                return;
+            Screen.SetResolution(PlayerPrefs.GetInt(SAVE_KEY_SCREEN_WIDTH), PlayerPrefs.GetInt(SAVE_KEY_SCREEN_HEIGHT), Screen.fullScreenMode, PlayerPrefs.GetInt(SAVE_KEY_REFRESH_RATE));
+
+#endif
         }
     }
 }
