@@ -61,8 +61,7 @@ namespace GraphicSettings
 
         public static void Load()
         {
-            if (PlayerPrefs.HasKey(SAVE_KEY))
-                Application.targetFrameRate = PlayerPrefs.GetInt(SAVE_KEY);
+            Application.targetFrameRate = PlayerPrefs.GetInt(SAVE_KEY, Application.targetFrameRate);
         }
     }
 }

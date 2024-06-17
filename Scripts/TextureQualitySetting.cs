@@ -77,12 +77,12 @@ namespace GraphicSettings
 
         public static void Load()
         {
-            if (PlayerPrefs.HasKey(SAVE_KEY) && QualityLevelSetting.IsCustomQualityLevel())
+            if (QualityLevelSetting.IsCustomQualityLevel())
             {
 #if UNITY_2022_2_OR_NEWER
-                QualitySettings.globalTextureMipmapLimit = PlayerPrefs.GetInt(SAVE_KEY);
+                QualitySettings.globalTextureMipmapLimit = PlayerPrefs.GetInt(SAVE_KEY, QualitySettings.globalTextureMipmapLimit);
 #else
-                QualitySettings.masterTextureLimit = PlayerPrefs.GetInt(SAVE_KEY);
+                QualitySettings.masterTextureLimit = PlayerPrefs.GetInt(SAVE_KEY, QualitySettings.masterTextureLimit);
 #endif
             }
         }

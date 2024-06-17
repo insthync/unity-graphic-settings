@@ -61,8 +61,7 @@ namespace GraphicSettings
 
         public static void Load()
         {
-            if (PlayerPrefs.HasKey(SAVE_KEY))
-                Screen.fullScreenMode = (FullScreenMode)PlayerPrefs.GetInt(SAVE_KEY);
+            Screen.fullScreenMode = (FullScreenMode)PlayerPrefs.GetInt(SAVE_KEY, (int)Screen.fullScreenMode);
         }
     }
 }

@@ -69,8 +69,8 @@ namespace GraphicSettings
 
         public static void Load()
         {
-            if (PlayerPrefs.HasKey(SAVE_KEY) && QualityLevelSetting.IsCustomQualityLevel())
-                QualitySettings.antiAliasing = PlayerPrefs.GetInt(SAVE_KEY);
+            if (QualityLevelSetting.IsCustomQualityLevel())
+                QualitySettings.antiAliasing = PlayerPrefs.GetInt(SAVE_KEY, QualitySettings.antiAliasing);
         }
     }
 }

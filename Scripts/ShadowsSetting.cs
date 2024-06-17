@@ -62,8 +62,8 @@ namespace GraphicSettings
 
         public static void Load()
         {
-            if (PlayerPrefs.HasKey(SAVE_KEY) && QualityLevelSetting.IsCustomQualityLevel())
-                QualitySettings.shadows = (ShadowQuality)PlayerPrefs.GetInt(SAVE_KEY);
+            if (QualityLevelSetting.IsCustomQualityLevel())
+                QualitySettings.shadows = (ShadowQuality)PlayerPrefs.GetInt(SAVE_KEY, (int)QualitySettings.shadows);
         }
     }
 }

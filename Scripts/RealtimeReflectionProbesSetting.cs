@@ -62,8 +62,8 @@ namespace GraphicSettings
 
         public static void Load()
         {
-            if (PlayerPrefs.HasKey(SAVE_KEY) && QualityLevelSetting.IsCustomQualityLevel())
-                QualitySettings.realtimeReflectionProbes = PlayerPrefs.GetInt(SAVE_KEY) > 0;
+            if (QualityLevelSetting.IsCustomQualityLevel())
+                QualitySettings.realtimeReflectionProbes = PlayerPrefs.GetInt(SAVE_KEY, QualitySettings.realtimeReflectionProbes ? 1 : 0) > 0;
         }
     }
 }
