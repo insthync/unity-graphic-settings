@@ -5,9 +5,9 @@
         [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void Initialize()
         {
+            QualityLevelSetting.Load();
             FullScreenSetting.Load();
             ScreenResolutionSetting.Load();
-            QualityLevelSetting.Load();
             AnisotropicFilteringSetting.Load();
             AntiAliasingSetting.Load();
             TextureQualitySetting.Load();
@@ -17,6 +17,12 @@
             RealtimeReflectionProbesSetting.Load();
             TargetFramerateSetting.Load();
             ResolutionScalingSetting.Load();
+            UrpAntiAliasingSetting.Load();
+            UrpShadowResolutionSetting.Load();
+            UrpShadowDistanceSetting.Load();
+            UrpShadowCascadeSetting.Load();
+            UrpSoftShadowSetting.Load();
+            UrpResolutionScalingSetting.Load();
         }
     }
 }
