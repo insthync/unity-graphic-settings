@@ -71,7 +71,7 @@ namespace GraphicSettings
         public static void Load()
         {
             if (QualityLevelSetting.IsCustomQualityLevel())
-                QualitySettings.shadowDistance = PlayerPrefs.GetFloat(SAVE_KEY, GetValue());
+                SetValue(PlayerPrefs.GetFloat(SAVE_KEY, GetValue()));
         }
 
         public static float GetValue()
