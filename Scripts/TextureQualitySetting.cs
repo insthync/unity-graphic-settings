@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace GraphicSettings
+namespace Insthync.GraphicSettings
 {
     public class TextureQualitySetting : MonoBehaviour, IGraphicSetting
     {

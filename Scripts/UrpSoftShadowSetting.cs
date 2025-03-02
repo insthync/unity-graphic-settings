@@ -2,7 +2,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GraphicSettings
+namespace Insthync.GraphicSettings
 {
     public class UrpSoftShadowSetting : BaseUrpSetting
     {

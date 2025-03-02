@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-namespace GraphicSettings
+namespace Insthync.GraphicSettings
 {
     public abstract class BaseUrpSetting : MonoBehaviour, IGraphicSetting
     {

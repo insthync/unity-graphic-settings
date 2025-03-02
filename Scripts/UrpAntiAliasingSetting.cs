@@ -2,7 +2,7 @@
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
-namespace GraphicSettings
+namespace Insthync.GraphicSettings
 {
     public class UrpAntiAliasingSetting : BaseUrpSetting
     {

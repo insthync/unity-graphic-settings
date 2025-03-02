@@ -1,4 +1,4 @@
-﻿namespace GraphicSettings
+﻿namespace Insthync.GraphicSettings
 {
     public static class GraphicSettingInitializer
     {

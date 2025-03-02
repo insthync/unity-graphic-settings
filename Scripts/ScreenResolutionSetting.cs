@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GraphicSettings
+namespace Insthync.GraphicSettings
 {
     public class ScreenResolutionSetting : MonoBehaviour, IGraphicSetting
     {

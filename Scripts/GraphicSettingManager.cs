@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace GraphicSettings
+namespace Insthync.GraphicSettings
 {
     public class GraphicSettingManager : MonoBehaviour
     {
