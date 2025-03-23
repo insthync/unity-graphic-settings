@@ -1,8 +1,11 @@
-﻿namespace Insthync.GraphicSettings
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
+
+namespace Insthync.GraphicSettings
 {
     public static class GraphicSettingInitializer
     {
-        [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.BeforeSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void Initialize()
         {
             try
@@ -11,7 +14,7 @@
             }
             catch (System.Exception ex)
             {
-                UnityEngine.Debug.LogException(ex);
+                Debug.LogException(ex);
             }
 
             try
@@ -20,7 +23,7 @@
             }
             catch (System.Exception ex)
             {
-                UnityEngine.Debug.LogException(ex);
+                Debug.LogException(ex);
             }
 
             try
@@ -29,7 +32,7 @@
             }
             catch (System.Exception ex)
             {
-                UnityEngine.Debug.LogException(ex);
+                Debug.LogException(ex);
             }
 
             try
@@ -38,7 +41,7 @@
             }
             catch (System.Exception ex)
             {
-                UnityEngine.Debug.LogException(ex);
+                Debug.LogException(ex);
             }
 
             try
@@ -47,7 +50,7 @@
             }
             catch (System.Exception ex)
             {
-                UnityEngine.Debug.LogException(ex);
+                Debug.LogException(ex);
             }
 
             try
@@ -56,7 +59,7 @@
             }
             catch (System.Exception ex)
             {
-                UnityEngine.Debug.LogException(ex);
+                Debug.LogException(ex);
             }
 
             try
@@ -65,7 +68,7 @@
             }
             catch (System.Exception ex)
             {
-                UnityEngine.Debug.LogException(ex);
+                Debug.LogException(ex);
             }
 
             try
@@ -74,7 +77,7 @@
             }
             catch (System.Exception ex)
             {
-                UnityEngine.Debug.LogException(ex);
+                Debug.LogException(ex);
             }
 
             try
@@ -83,7 +86,7 @@
             }
             catch (System.Exception ex)
             {
-                UnityEngine.Debug.LogException(ex);
+                Debug.LogException(ex);
             }
 
             try
@@ -92,7 +95,7 @@
             }
             catch (System.Exception ex)
             {
-                UnityEngine.Debug.LogException(ex);
+                Debug.LogException(ex);
             }
 
             try
@@ -101,7 +104,7 @@
             }
             catch (System.Exception ex)
             {
-                UnityEngine.Debug.LogException(ex);
+                Debug.LogException(ex);
             }
 
             try
@@ -110,7 +113,7 @@
             }
             catch (System.Exception ex)
             {
-                UnityEngine.Debug.LogException(ex);
+                Debug.LogException(ex);
             }
 
             try
@@ -119,7 +122,7 @@
             }
             catch (System.Exception ex)
             {
-                UnityEngine.Debug.LogException(ex);
+                Debug.LogException(ex);
             }
 
             try
@@ -128,7 +131,7 @@
             }
             catch (System.Exception ex)
             {
-                UnityEngine.Debug.LogException(ex);
+                Debug.LogException(ex);
             }
 
             try
@@ -137,7 +140,7 @@
             }
             catch (System.Exception ex)
             {
-                UnityEngine.Debug.LogException(ex);
+                Debug.LogException(ex);
             }
 
             try
@@ -146,7 +149,7 @@
             }
             catch (System.Exception ex)
             {
-                UnityEngine.Debug.LogException(ex);
+                Debug.LogException(ex);
             }
 
             try
@@ -155,7 +158,7 @@
             }
             catch (System.Exception ex)
             {
-                UnityEngine.Debug.LogException(ex);
+                Debug.LogException(ex);
             }
 
             try
@@ -164,7 +167,23 @@
             }
             catch (System.Exception ex)
             {
-                UnityEngine.Debug.LogException(ex);
+                Debug.LogException(ex);
+            }
+            SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+        }
+
+        private static void SceneManager_sceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
+        {
+            if (loadSceneMode != LoadSceneMode.Single)
+                return;
+
+            try
+            {
+                UrpPostProcessSetting.Load();
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogException(ex);
             }
         }
     }
